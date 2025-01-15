@@ -14,7 +14,7 @@ from pipelines.models import TextToImageRequest
 from torch import Generator
 from transformers import T5EncoderModel, CLIPTextModel
 import time
-from torchao.quantization import quantize_, int8_weight_only, int8_dynamic_activation_int8_weight
+from torchao.quantization import quantize_, int8_weight_only, int8_dynamic_activation_int8_weight, float8_dynamic_activation_float8_weight
 
 Pipeline: TypeAlias = FluxPipeline
 
@@ -30,7 +30,7 @@ def load_pipeline() -> Pipeline:
         local_files_only=True,
     ).to("cpu")
 
-    quantize_(pipeline.transformer, int8_weight_only())
+    quantize_(pipeline.transformer, float8_dynamic_activation_float8_weight())
     pipeline.transformer = pipeline.transformer.to("cuda")
 
     pipeline.transformer.to(memory_format=torch.channels_last)
