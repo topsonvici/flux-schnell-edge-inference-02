@@ -30,7 +30,7 @@ def load_pipeline() -> Pipeline:
         local_files_only=True,
     ).to("cpu")
 
-    quantize_(pipeline.transformer, float8_dynamic_activation_float8_weight())
+    quantize_(pipeline.transformer, int8_weight_only())
     pipeline.transformer = pipeline.transformer.to("cuda")
 
     pipeline.transformer.to(memory_format=torch.channels_last)
